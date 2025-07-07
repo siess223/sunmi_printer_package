@@ -1,6 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.shwethe.sunmi_printer.sunmi_printer">
   
+  <!-- Android 11+ 包可见性声明 -->
+  <queries>
+    <package android:name="woyou.aidlservice.jiuv5" />
+    <package android:name="com.sunmi.hcservice" />
+  </queries>
+  
   <!-- Sunmi打印机权限 -->
   <uses-permission android:name="android.permission.BLUETOOTH" />
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -13,5 +19,17 @@
   
   <!-- Sunmi打印服务权限 -->
   <uses-permission android:name="com.sunmi.permission.PRINTER" />
+  
+  <application>
+    <!-- 商米双屏通信接收器 -->
+    <receiver
+        android:name="sunmi.ds.MsgReceiver"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="com.sunmi.hcservice" />
+            <action android:name="com.sunmi.hcservice.status" />
+        </intent-filter>
+    </receiver>
+  </application>
   
 </manifest>

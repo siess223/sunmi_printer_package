@@ -16,6 +16,20 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        // 商米官方仓库
+        maven { 
+            url 'https://repo.sunmi.com/repository/maven-public/'
+            allowInsecureProtocol = false
+        }
+        // 备用仓库
+        maven { 
+            url 'http://maven.sunmi.com/repository/maven-public/'
+            allowInsecureProtocol = true
+        }
+        // 阿里云仓库
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        // JitPack 仓库
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -39,15 +53,17 @@ android {
         testImplementation("junit:junit:4.13.2")
         testImplementation("org.mockito:mockito-core:5.0.0")
         
-        // 添加Sunmi打印机官方库
+        // 使用商米官方传统 SDK - 这个版本更稳定
         implementation("com.sunmi:printerlibrary:1.0.18")
-        // 或者如果使用其他版本
-        // implementation("com.sunmi:sunmiprinterx:1.0.4")
         
-        // 如果使用本地JAR/AAR文件，取消注释以下行：
+        // LCD 客显功能通过传统打印机服务提供，无需额外依赖
+        
+        // 添加必要的依赖
+        implementation("com.google.code.gson:gson:2.10.1")
+        implementation("androidx.annotation:annotation:1.8.0")
+        
+        // 如果需要使用本地 JAR/AAR 文件，取消注释以下行：
         // implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-        // 或者指定具体的文件：
-        // implementation files('libs/sunmi-printer-library.jar')
     }
 
     testOptions {

@@ -10,127 +10,306 @@ class MethodChannelSunmiPrinter extends SunmiPrinterPlatform {
   final methodChannel = const MethodChannel('sunmi_printer');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
+  Future<bool?> bindService() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('bindService');
+      return result;
+    } catch (e) {
+      debugPrint('绑定服务失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<int?> getPrinterStatus() async {
-    final status = await methodChannel.invokeMethod<int>('getPrinterStatus');
-    return status;
+  Future<bool?> unBindService() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('unBindService');
+      return result;
+    } catch (e) {
+      debugPrint('解绑服务失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<bool?> initPrinter() async {
-    final result = await methodChannel.invokeMethod<bool>('initPrinter');
-    return result;
+  Future<bool?> printText(String text, int? size, String? align, bool? bold, bool? underline) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('printText', {
+        'text': text,
+        'size': size,
+        'align': align,
+        'bold': bold,
+        'underline': underline,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('打印文本失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printText(String text, int? textSize, bool? bold, bool? underline, int? alignment) async {
-    await methodChannel.invokeMethod('printText', {
-      'text': text,
-      'textSize': textSize,
-      'bold': bold,
-      'underline': underline,
-      'alignment': alignment,
-    });
+  Future<bool?> printImage(List<int> imageData, int? width, int? height, String? align) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('printImage', {
+        'image': Uint8List.fromList(imageData),
+        'width': width,
+        'height': height,
+        'align': align,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('打印图片失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printNewLine(int lines) async {
-    await methodChannel.invokeMethod('printNewLine', {'lines': lines});
+  Future<bool?> printQRCode(String data, int? size, String? align) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('printQRCode', {
+        'data': data,
+        'size': size,
+        'align': align,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('打印二维码失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printQRCode(String data, int? size, int? errorLevel) async {
-    await methodChannel.invokeMethod('printQRCode', {
-      'data': data,
-      'size': size,
-      'errorLevel': errorLevel,
-    });
+  Future<bool?> printBarcode(String data, String? type, int? width, int? height, String? align) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('printBarcode', {
+        'data': data,
+        'type': type,
+        'width': width,
+        'height': height,
+        'align': align,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('打印条形码失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printBarcode(String data, int? barcodeType, int? height, int? width, int? textPosition) async {
-    await methodChannel.invokeMethod('printBarcode', {
-      'data': data,
-      'barcodeType': barcodeType,
-      'height': height,
-      'width': width,
-      'textPosition': textPosition,
-    });
+  Future<bool?> printTable(List<Map<String, dynamic>> tableData, List<int>? columnWidths) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('printTable', {
+        'tableData': tableData,
+        'columnWidths': columnWidths,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('打印表格失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printBitmap(String imagePath, int? width, int? height) async {
-    await methodChannel.invokeMethod('printBitmap', {
-      'imagePath': imagePath,
-      'width': width,
-      'height': height,
-    });
+  Future<bool?> printReceipt(Map<String, dynamic> receiptData) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('printReceipt', {
+        'receiptData': receiptData,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('打印小票失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> setAlignment(int alignment) async {
-    await methodChannel.invokeMethod('setAlignment', {'alignment': alignment});
+  Future<bool?> cutPaper() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('cutPaper');
+      return result;
+    } catch (e) {
+      debugPrint('切纸失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> setTextSize(int size) async {
-    await methodChannel.invokeMethod('setTextSize', {'size': size});
+  Future<bool?> openDrawer() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('openDrawer');
+      return result;
+    } catch (e) {
+      debugPrint('开钱箱失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> setTextStyle(bool? bold, bool? underline) async {
-    await methodChannel.invokeMethod('setTextStyle', {
-      'bold': bold,
-      'underline': underline,
-    });
+  Future<bool?> feedPaper(int? lines) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('feedPaper', {
+        'lines': lines,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('进纸失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> cutPaper() async {
-    await methodChannel.invokeMethod('cutPaper');
+  Future<Map<String, dynamic>?> getPrinterStatus() async {
+    try {
+      final result = await methodChannel.invokeMethod('getPrinterStatus');
+      if (result != null && result is Map) {
+        return Map<String, dynamic>.from(result);
+      }
+      return result as Map<String, dynamic>?;
+    } catch (e) {
+      debugPrint('获取打印机状态失败: $e');
+      return null;
+    }
   }
 
   @override
-  Future<void> openDrawer() async {
-    await methodChannel.invokeMethod('openDrawer');
+  Future<Map<String, dynamic>?> getPrinterInfo() async {
+    try {
+      final result = await methodChannel.invokeMethod('getPrinterInfo');
+      if (result != null && result is Map) {
+        return Map<String, dynamic>.from(result);
+      }
+      return result as Map<String, dynamic>?;
+    } catch (e) {
+      debugPrint('获取打印机信息失败: $e');
+      return null;
+    }
   }
 
   @override
-  Future<String?> getPrinterSerialNumber() async {
-    final serial = await methodChannel.invokeMethod<String>('getPrinterSerialNumber');
-    return serial;
+  Future<bool?> isPrinterConnected() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('isPrinterConnected');
+      return result;
+    } catch (e) {
+      debugPrint('检查打印机连接失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<String?> getPrinterVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPrinterVersion');
-    return version;
+  Future<bool?> enterPrinterBuffer(bool? clear) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('enterPrinterBuffer', {
+        'clear': clear,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('进入打印缓冲区失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printTable(List<String> texts, List<int> widths, List<int> alignments) async {
-    await methodChannel.invokeMethod('printTable', {
-      'texts': texts,
-      'widths': widths,
-      'alignments': alignments,
-    });
+  Future<bool?> exitPrinterBuffer(bool? commit) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('exitPrinterBuffer', {
+        'commit': commit,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('退出打印缓冲区失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> printDivider(String? char, int? length) async {
-    await methodChannel.invokeMethod('printDivider', {
-      'char': char,
-      'length': length,
-    });
+  Future<bool?> clearPrinterBuffer() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('clearPrinterBuffer');
+      return result;
+    } catch (e) {
+      debugPrint('清空打印缓冲区失败: $e');
+      return false;
+    }
+  }
+
+  // ===== LCD 客显功能 =====
+
+  @override
+  Future<bool?> lcdDisplayText(String text, int? size, bool? bold) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('lcdDisplayText', {
+        'text': text,
+        'size': size,
+        'bold': bold,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('LCD显示文本失败: $e');
+      return false;
+    }
   }
 
   @override
-  Future<void> feedPaper(int lines) async {
-    await methodChannel.invokeMethod('feedPaper', {'lines': lines});
+  Future<bool?> lcdDisplayTexts(List<String> texts, List<int>? sizes) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('lcdDisplayTexts', {
+        'texts': texts,
+        'sizes': sizes,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('LCD显示多行文本失败: $e');
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> lcdDisplayBitmap(List<int> imageData) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('lcdDisplayBitmap', {
+        'image': Uint8List.fromList(imageData),
+      });
+      return result;
+    } catch (e) {
+      debugPrint('LCD显示图片失败: $e');
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> lcdDisplayDigital(String digital) async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('lcdDisplayDigital', {
+        'digital': digital,
+      });
+      return result;
+    } catch (e) {
+      debugPrint('LCD显示数字失败: $e');
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> lcdClear() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('lcdClear');
+      return result;
+    } catch (e) {
+      debugPrint('LCD清屏失败: $e');
+      return false;
+    }
+  }
+
+  @override
+  Future<bool?> lcdInit() async {
+    try {
+      final result = await methodChannel.invokeMethod<bool>('lcdInit');
+      return result;
+    } catch (e) {
+      debugPrint('LCD初始化失败: $e');
+      return false;
+    }
   }
 }
